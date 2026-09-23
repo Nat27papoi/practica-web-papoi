@@ -5,6 +5,7 @@ const catalogo = document.getElementById('catalogo');
 const listaPedido = document.getElementById('lista-pedido');
 const totalElemento = document.getElementById('total');
 const btnVaciar = document.getElementById('btn-vaciar');
+const contenedorFiltros = document.getElementById('filtros');
 function mostrarProductos(lista) {
   const tarjetasHTML = lista.map(p => `
     <div class="bg-white rounded-lg shadow p-4 flex flex-col justify-between">
@@ -37,6 +38,29 @@ function mostrarPedido() {
   // Actualiza el texto del total
   totalElemento.textContent = `Total: $${total.toFixed(2)} USD`;
 }
+contenedorFiltros.addEventListener('click', (evento) => {
+  const boton = evento.target.closest('button[data-categoria]');
+  if (!boton) return;
+
+  const categoria = boton.dataset.categoria;
+
+  // Punto 2: Filtrar la lista de productos
+  const listaFiltrada = categoria === 'Todos'
+    ? productos
+    : productos.filter(p => p.categoria === categoria);
+
+  mostrarProductos(listaFiltrada);
+
+  // Punto 3: Resaltar el botón activo cambiando las clases de Tailwind
+  const todosLosBotones = contenedorFiltros.querySelectorAll('button[data-categoria]');
+  todosLosBotones.forEach(btn => {
+    if (btn === boton) {
+      btn.className = "btn-filtro bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow transition";
+    } else {
+      btn.className = "btn-filtro bg-white text-gray-700 hover:bg-gray-100 font-semibold py-2 px-4 rounded shadow transition";
+    }
+  });
+});
 catalogo.addEventListener('click', (evento) => {
   const boton = evento.target.closest('button[data-id]');
   if (!boton) return;
