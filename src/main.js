@@ -17,7 +17,22 @@ const catalogo = document.getElementById('catalogo')
 //   `).join('')
 // ------------------------------------------------------------
 function mostrarProductos(lista) {
-  // Escribe aquí tu código
+  const tarjetasHTML = lista.map(p => `
+    <div class="bg-white rounded-lg shadow p-4 flex flex-col justify-between">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-800">${p.nombre}</h2>
+        <p class="text-gray-600 font-medium my-2">$${p.precio.toFixed(2)} USD</p>
+      </div>
+      <button 
+        data-id="${p.id}" 
+        class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+        Agregar
+      </button>
+    </div>
+  `).join(''); // 2. Convertimos el arreglo de HTML en un solo string continuo
+
+  // 3. Insertamos el HTML renderizado dentro del contenedor 'catalogo'
+  catalogo.innerHTML = tarjetasHTML;
 }
 
 mostrarProductos(productos)
