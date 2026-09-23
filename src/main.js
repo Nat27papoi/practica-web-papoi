@@ -1,21 +1,10 @@
 import './style.css'
 import { productos } from './datos.js'
-
 // Elemento donde se dibujan las tarjetas (lo creas en el Ejercicio 1)
-const catalogo = document.getElementById('catalogo')
-
-// ------------------------------------------------------------
-// EJERCICIO 2 — mostrarProductos(lista)
-// Convierte una lista de productos en tarjetas HTML y las pone en la página.
-// Forma general:
-//   catalogo.innerHTML = lista.map(p => `
-//     <article class="...las mismas clases de tu Ejercicio 1...">
-//       <h3>${p.nombre}</h3>
-//       ...
-//       <button data-id="${p.id}">Agregar</button>
-//     </article>
-//   `).join('')
-// ------------------------------------------------------------
+const catalogo = document.getElementById('catalogo');
+const listaPedido = document.getElementById('lista-pedido');
+const totalElemento = document.getElementById('total');
+const btnVaciar = document.getElementById('btn-vaciar');
 function mostrarProductos(lista) {
   const tarjetasHTML = lista.map(p => `
     <div class="bg-white rounded-lg shadow p-4 flex flex-col justify-between">
@@ -30,30 +19,40 @@ function mostrarProductos(lista) {
       </button>
     </div>
   `).join(''); // 2. Convertimos el arreglo de HTML en un solo string continuo
-
   // 3. Insertamos el HTML renderizado dentro del contenedor 'catalogo'
   catalogo.innerHTML = tarjetasHTML;
 }
-
-mostrarProductos(productos)
-
-// ------------------------------------------------------------
-// EJERCICIO 3 — Armar el pedido
-// El pedido es un arreglo con los productos que la persona va agregando.
-// Pasos (detalle en el README):
-//   1. Escucha el clic en el contenedor #catalogo (delegación de eventos).
-//   2. Busca el producto por id con .find() y agrégalo con .push().
-//   3. Dibuja el pedido con mostrarPedido() y calcula el total con .reduce().
-//   4. Botón "Vaciar pedido".
-// ------------------------------------------------------------
-const pedido = []
-
-// Escribe aquí tu código del Ejercicio 3
-
-// ------------------------------------------------------------
-// EJERCICIO 4 — Filtrar por categoría
-// Botones de categoría que llamen a mostrarProductos() con
-// productos.filter(...). El botón "Todos" muestra la lista completa.
-// ------------------------------------------------------------
-
-// Escribe aquí tu código del Ejercicio 4
+mostrarProductos(productos);
+const pedido = [];
+function mostrarPedido() {
+  // Dibuja cada producto del pedido con map dentro de #lista-pedido
+  listaPedido.innerHTML = pedido.map(p => `
+    <li class="flex justify-between items-center py-1 border-b border-gray-200">
+      <span>${p.nombre}</span>
+      <span class="font-semibold">$${p.precio.toFixed(2)}</span>
+    </li>
+  `).join('');
+  // Calcula el total con reduce
+  const total = pedido.reduce((suma, p) => suma + p.precio, 0);
+  // Actualiza el texto del total
+  totalElemento.textContent = `Total: $${total.toFixed(2)} USD`;
+}
+catalogo.addEventListener('click', (evento) => {
+  const boton = evento.target.closest('button[data-id]');
+  if (!boton) return;
+  const id = Number(boton.dataset.id);
+  // 1. Busca el producto con productos.find(...)
+  const productoEncontrado = productos.find(p => p.id === id);
+  if (productoEncontrado) {
+    // 2. Agrégalo a pedido con push
+    pedido.push(productoEncontrado);
+    // 3. Llama a mostrarPedido()
+    mostrarPedido();
+  }
+});
+btnVaciar.addEventListener('click', () => {
+  // Deja el arreglo vacío
+  pedido.length = 0;
+  // Redibuja
+  mostrarPedido();
+});

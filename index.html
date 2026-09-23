@@ -18,6 +18,22 @@
       <div id="catalogo" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       
     </div>
+   <aside class="bg-white rounded-lg shadow p-6 w-full md:w-80 h-fit">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4">Mi pedido</h2>
+  
+  <!-- Lista de productos agregados -->
+  <ul id="lista-pedido" class="space-y-2 mb-4"></ul>
+  
+  <!-- Total -->
+  <p id="total" class="text-lg font-bold text-gray-800 border-t pt-2 mb-4">Total: $0.00 USD</p>
+  
+  <!-- Botón Vaciar pedido -->
+  <button 
+    id="btn-vaciar" 
+    class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition">
+    Vaciar pedido
+  </button>
+</aside>
     </main>
     <footer>
 
